@@ -1,0 +1,17 @@
+ozone=read.table("ozone.txt",header = T)
+summary(ozone)
+plot(maxO3~T12,data = ozone)
+reg=lm(maxO3~T12,data = ozone)
+resume=summary(reg)
+plot(maxO3~T12,data=ozone)
+T12=seq(min(ozone[,"T12"]),max(ozone[,"T12"]),length=100)
+Grille = data.frame(T12)
+ICdte = predict(reg,new=Grille,interval="confidence",level=0.95)
+matlines(Grille$T12,cbind(ICdte),lty=c(1,2,2),col=1)
+Pente = cov(ozone$maxO3,ozone$T12)/var(ozone$T12)
+Ordonnee_origine = mean(ozone$maxO3) - mean(ozone$T12)*Pente
+
+fitted(reg)
+res<-resid(reg)
+plot(res,main="Résidus")
+abline(h=0,col="red")
